@@ -9,6 +9,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         //LoggingUtil.initLogManager();
+        try {
+            FileInputStream fis =  new FileInputStream("logging.properties");
+            LogManager.getLogManager().readConfiguration(fis);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Hello world!");
 
