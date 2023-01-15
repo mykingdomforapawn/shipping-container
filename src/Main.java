@@ -11,22 +11,24 @@ public class Main {
         //LoggingUtil.initLogManager();
 
         System.out.println("Hello world!");
-        ContainerType xx = ContainerType.TANK_CONTAINER;
-        System.out.println(xx);
-        System.out.println(xx.emptyWeight);
 
-        Ship myShip = new Ship(20, 20000, List.of(ContainerType.REEFER_CONTAINER, ContainerType.TANK_CONTAINER));
-        System.out.println(myShip.getWeightCapacity());
-        System.out.println(myShip.getAllowedContainerTypes());
-
+        // Init ship and add container
+        Ship myShip = new Ship(2, 20000, List.of(ContainerType.REEFER_CONTAINER, ContainerType.TANK_CONTAINER));
         Container myContainer = new Container(ContainerType.TANK_CONTAINER, 300);
-        System.out.println(myContainer.getId());
-        System.out.println(myContainer.getContainerType());
-
         myShip.addContainer(myContainer);
-        System.out.println(myShip.getContainerIDs());
-        System.out.println(myShip.getContainers());
 
+        // Add the same container again
+        myShip.addContainer(myContainer);
+
+        // Add wrong container type
         myShip.addContainer(new Container(ContainerType.OPEN_TOP_CONTAINER, 20));
+
+        // Add too heavy container
+        myShip.addContainer(new Container(ContainerType.TANK_CONTAINER, 30000));
+
+        // Add too many containers
+        myShip.addContainer(new Container(ContainerType.REEFER_CONTAINER, 20));
+        myShip.addContainer(new Container(ContainerType.REEFER_CONTAINER, 20));
+
     }
 }

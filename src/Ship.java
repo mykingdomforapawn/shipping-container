@@ -15,16 +15,19 @@ public class Ship {
     private static final Logger LOGGER = Logger.getLogger(Ship.class.getName());
 
     static {
-        FileHandler fileHandler;
         try {
-            fileHandler = new FileHandler(Ship.class.getName());
-            fileHandler.setFormatter(new SimpleFormatter());
+            FileHandler fileHandler_critical = new FileHandler("logs/" + Ship.class.getName() + "_critical.log");
+            FileHandler fileHandler_all = new FileHandler("logs/" + Ship.class.getName() + "_all.log");
+            fileHandler_critical.setFormatter(new SimpleFormatter());
+            fileHandler_all.setFormatter(new SimpleFormatter());
+            fileHandler_critical.setLevel(Level.WARNING);
+            fileHandler_all.setLevel(Level.ALL);
+            LOGGER.addHandler(fileHandler_critical);
+            LOGGER.addHandler(fileHandler_all);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        fileHandler.setLevel(Level.FINE);
-        LOGGER.addHandler(fileHandler);
     }
     public ArrayList<Container> getContainers() {
         return containers;
@@ -38,25 +41,30 @@ public class Ship {
         this.weightCapacity = weightCapacity;
         this.countCapacity = countCapacity;
         this.allowedContainerTypes = allowedContainerTypes;
-        LOGGER.log(Level.INFO, "New ship initiated");
+        LOGGER.log(Level.INFO, "New ship initiated.");
     }
 
     public void addContainer(Container container) {
         if (this.getAllowedContainerTypes().contains(container.getContainerType())) {
             if (this.countCapacity > this.count) {
                 if (this.weightCapacity > this.weight + container.getWeight()) {
-                    this.count += 1;
-                    this.weight += container.getWeight();
-                    this.containerIDs.add(container.getId());
-                    this.containers.add(container);
+                    if (!this.containerIDs.contains(container.getId())) {
+                        this.count += 1;
+                        this.weight += container.getWeight();
+                        this.containerIDs.add(container.getId());
+                        this.containers.add(container);
+                        LOGGER.log(Level.INFO, "Container " + container.getId() + " added to ship.");
+                    } else {
+                        LOGGER.log(Level.INFO, "Container " + container.getId() + " can not be added because it is already on the ship.");
+                    }
                 } else {
-                    System.out.println("case3");
+                    LOGGER.log(Level.WARNING, "Container " + container.getId() + " can not be added due to weight capacity issues.");
                 }
             } else {
-                System.out.println("case2");
+                LOGGER.log(Level.WARNING, "Container " + container.getId() + " can not be added due to count capacity issues.");
             }
         } else {
-            LOGGER.log(Level.WARNING, "Container Type not allowed.");
+            LOGGER.log(Level.WARNING, "Container Type " + container.getId() + " can not be added due to container type issues.");
         }
     }
 

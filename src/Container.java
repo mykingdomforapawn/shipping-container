@@ -7,7 +7,7 @@ public class Container {
     private final ContainerType containerType;
     private final UUID id;
     private final int cargoWeight;
-    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+    //private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     static {
         //ConsoleHandler consoleHandler = new ConsoleHandler();
@@ -18,7 +18,7 @@ public class Container {
         this.containerType = containerType;
         this.cargoWeight = cargoWeight;
         this.id = UUID.randomUUID();
-        LOGGER.logp(Level.INFO, Container.class.getName(), "Constructor", "New container with id " + this.id + " initiated");
+        //LOGGER.logp(Level.INFO, Container.class.getName(), "Constructor", "New container with id " + this.id + " initiated");
     }
 
     public UUID getId() {
