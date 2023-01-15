@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.*;
 
@@ -6,18 +5,7 @@ public class Container {
     private final ContainerType containerType;
     private final UUID id;
     private final int cargoWeight;
-    private static final Logger LOGGER = Logger.getLogger(Container.class.getName());
-
-    static {
-        try {
-            FileHandler fileHandler = new FileHandler("logs/" + Container.class.getName() + ".log");
-            fileHandler.setLevel(Level.INFO);
-            LOGGER.addHandler(fileHandler);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
+    private static final Logger LOGGER = LoggingUtil.configureContainerLogger(Container.class.getName());
 
     public Container(ContainerType containerType, int cargoWeight) {
         this.containerType = containerType;

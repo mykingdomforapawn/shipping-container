@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,29 +11,14 @@ public class Ship {
     private int count = 0;
     private final ArrayList<Container> containers = new ArrayList<>();
     private final ArrayList<UUID> containerIDs = new ArrayList<>();
-    private static final Logger LOGGER = Logger.getLogger(Ship.class.getName());
-
-    static {
-        try {
-            FileHandler fileHandler_critical = new FileHandler("logs/" + Ship.class.getName() + "_critical.log");
-            FileHandler fileHandler_all = new FileHandler("logs/" + Ship.class.getName() + "_all.log");
-            fileHandler_critical.setFormatter(new SimpleFormatter());
-            fileHandler_all.setFormatter(new SimpleFormatter());
-            fileHandler_critical.setLevel(Level.WARNING);
-            fileHandler_all.setLevel(Level.ALL);
-            LOGGER.addHandler(fileHandler_critical);
-            LOGGER.addHandler(fileHandler_all);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-    public ArrayList<Container> getContainers() {
-        return containers;
-    }
+    private static final Logger LOGGER = LoggingUtil.configureShipLogger(Ship.class.getName());
 
     public ArrayList<UUID> getContainerIDs() {
         return containerIDs;
+    }
+
+    public ArrayList<Container> getContainers() {
+        return containers;
     }
 
     public Ship(int countCapacity, int weightCapacity, List<ContainerType> allowedContainerTypes) {
@@ -45,7 +29,7 @@ public class Ship {
     }
 
     public void addContainer(Container container) {
-        if (this.getAllowedContainerTypes().contains(container.getContainerType())) {
+        if (this.allowedContainerTypes.contains(container.getContainerType())) {
             if (this.countCapacity > this.count) {
                 if (this.weightCapacity > this.weight + container.getWeight()) {
                     if (!this.containerIDs.contains(container.getId())) {
@@ -67,19 +51,4 @@ public class Ship {
             LOGGER.log(Level.WARNING, "Container Type " + container.getId() + " can not be added due to container type issues.");
         }
     }
-
-    public int getWeightCapacity() {
-        return weightCapacity;
-    }
-
-    public int getCountCapacity() {
-        return countCapacity;
-    }
-
-    public List<ContainerType> getAllowedContainerTypes() {
-        return allowedContainerTypes;
-    }
-
-
-
 }
